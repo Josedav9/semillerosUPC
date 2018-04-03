@@ -10,6 +10,7 @@ var models = require("./models/index");
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+let semilleros = require('./routes/semilleros');
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/semilleros', semilleros)
 
 //Sincronizacion de la base de Datos
 
