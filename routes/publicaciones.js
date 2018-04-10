@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 let router =  express.Router();
 //Accedo al modelo de mi base de datos
 let models = require('../models/index');
@@ -53,22 +54,24 @@ router.get('/buscarPublicacion/:id', (req,res)=>{
 });
 
 router.get('/eliminarPublicacion/:id', (req,res)=>{
-  let id = req.params.id
-  models.Publicaciones.find({
-    where:{
-      "idPublicacion":id
-    }
-  }).then(
-    (publicacion)=>{
-      publicacion.destroy.then(
-        ()=>{
-          res.json({'msg':'Se elimino correctamente'});
+  let idPublicacion = req.params.id;
+  models.Publicaciones.find(
+      { where:{
+          "idPublicacion":idPublicacion
+
+          }
+     }
+  ).then(
+        (publicacion) => {
+          publicacion.destroy().then(
+            ()=>{
+              res.json({ 'msg':"Se elimino" })
+            }
+          );
         }
-      )
-    }
   ).catch(
     (error)=>{
-      res.json(error);
+      res.json(error)
     }
   )
 });
