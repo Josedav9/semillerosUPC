@@ -8,11 +8,15 @@ const cors = require('cors');
 
 //Modelos de la Base de Datos
 var models = require("./models/index");
-
+//Rutas
 var index = require('./routes/index');
 var users = require('./routes/users');
 let semilleros = require('./routes/semilleros');
 let publicaciones  = require('./routes/publicaciones');
+
+//Passport
+const passport = require('passport');
+const session = require('express-session');
 
 var app = express();
 
@@ -29,13 +33,34 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
+//Passport Configuracion session
+
+app.use(session(
+   {
+     secret:"hashtag te queremos profe te queremos"
+     resave:true,
+     saveUninitialized:true,
+     cookie:{
+       maxAge: 10 * 60 * 1000
+     },
+     rolling:true
+   }
+ ));
+
+//Passport Definition
+ app.use( passport.initialize() );
+ app.use( passport.session() );
+
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/semilleros', semilleros);
 app.use('/publicaciones', publicaciones);
 
-//Sincronizacion de la base de Datos
+//Enviar a la configuracion de la estrategia
+require('./config/passportStrategy')( passport, models.usuarios );
 
+//Sincronizacion de la base de Datos
 models.sequelize.sync().then(()=>{
   console.log("Se conecto a la base de datos !!!");
 }).catch( (error)=>{
