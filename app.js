@@ -35,21 +35,11 @@ app.use(cors())
 
 //Passport Configuracion session
 
-app.use(session(
-   {
-     secret:"hashtag te queremos profe te queremos"
-     resave:true,
-     saveUninitialized:true,
-     cookie:{
-       maxAge: 10 * 60 * 1000
-     },
-     rolling:true
-   }
- ));
+
 
 //Passport Definition
- app.use( passport.initialize() );
- app.use( passport.session() );
+ //app.use( passport.initialize() );
+ //app.use( passport.session() );
 
 
 app.use('/', index);
@@ -58,7 +48,7 @@ app.use('/semilleros', semilleros);
 app.use('/publicaciones', publicaciones);
 
 //Enviar a la configuracion de la estrategia
-require('./config/passportStrategy')( passport, models.usuarios );
+//require('./config/passportStrategy')( passport, models.usuarios );
 
 //Sincronizacion de la base de Datos
 models.sequelize.sync().then(()=>{
